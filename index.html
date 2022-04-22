@@ -46,6 +46,11 @@
         <audio id="snapSound" src="audio/snap.wav" preload = "auto"></audio>
       </div>
     </div>
+    <div class="instructions">
+      <h3>Instructions</h3>
+      <p>You can compare faces with the select dropdowns provided.</p>
+      <p>To compare a face with a webcam image, click <strong>Start Camera</strong> - allow access to the camera via the browser dialog, and bring your face as close as possible to the camera, looking straight ahead, before clicking the <strong>Take Photo</strong> button. </p>
+    </div>
   </div>
 
   <script>
@@ -101,12 +106,13 @@
       await onSelectionChanged(1, $('#selectList1 select').val())
       await onSelectionChanged(2, $('#selectList2 select').val())
       updateResult()
+      $('.webcam-start').show();
     }
 
     
 
     function webcamInit(){
-      $('.take-photo, .reset').hide();
+      $('.take-photo, .reset, .webcam-start').hide();
     }
 
     function webcamStart(){
@@ -162,6 +168,7 @@
         async (uri) => {
           await onSelectionChanged(2, uri)
           updateResult()
+          
         },
         { className: 'mike', imageIdx: 1 }
       )

@@ -1,5 +1,15 @@
 # Webcam Face Match
 
+[Demo](https://webcam-facematch.netlify.app/)
+
+## Instructions
+
+You can compare faces with the select dropdowns provided.
+
+To compare a face with a webcam image, click Start Camera - allow access to the camera via the browser dialog, and bring your face as close as possible to the camera, looking straight ahead, before clicking the Take Photo button.
+
+## Description
+
 This prototype uses a subset of functionality from [face-api](https://github.com/justadudewhohacks/face-api.js#interface-face-detection), trained on this [BBT Dataset](https://github.com/Daniel595/Jetson_nano_face_recognition/tree/master/faces/train/datasets/bbt) combined with [webcam-easy](https://github.com/bensonruan/webcam-easy) to take a photo of you via the webcam, and compare it to a list of faces to determine similarity.
 
 The prototype was built to test basic feasibility of asserting one's own identity for use in self-attested verifiable credentials via a web interface.

@@ -1,3 +1,4 @@
+
 .page-container {
   left: 0;
   right: 0;
@@ -57,14 +58,6 @@
   padding: 0 8px !important;
 }
 
-#github-link {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid;
-  margin-bottom: 10px;
-}
-
 #overlay, .overlay {
   position: absolute;
   top: 0;
@@ -75,15 +68,7 @@
   margin: 10px;
 }
 
-input[type="file"]::-webkit-file-upload-button {
-    background: #26a69a;
-    border: 1px solid gray;
-    cursor: pointer;
-    color: #fff;
-    border-radius: .2em;
-}
-
-.chooser-container, .webcam-container {
+.chooser-container, .webcam-container, .instructions {
   width: 400px;
 }
 
@@ -121,6 +106,16 @@ button {
   margin: 10px 0;
 }
 
+.webcam-start {
+  margin-top: 0px;
+}
+
+
 #webcam {
   border: 1px solid #dedede;
+}
+
+#distance {
+  padding: 5px;
+  box-sizing: border-box;
 }
