@@ -3,16 +3,19 @@
 <head>
   <link rel="stylesheet" href="css/materialize.css">
   <link rel="stylesheet" href="css/styles.css">
-  <script src="face-api.js"></script>
-  <script src="js/commons.js"></script>
-  <script src="js/bbt.js"></script>
   <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
   <script src="js/lib/materialize.min.js"></script>
+  <!-- <script src="js/lib/webcam-easy.min.js"></script> -->
+  <!-- MH: Modded for BW conversion -->
+  <script src="js/lib/webcam-easy.js"></script>
+  <script src="face-api.min.js"></script>
+  <script src="js/commons.js"></script>
+  <script src="js/bbt.js"></script>
+  
 </head>
 <body>
-  <div id="navbar"></div>
   <div class="center-content page-container">
-    <div>
+    <div class="chooser-container">
       <div class="progress" id="loader">
         <div class="indeterminate"></div>
       </div>
@@ -30,13 +33,32 @@
         <label for="distance">Distance:</label>
         <input disabled value="-" id="distance" type="text" class="bold">
       </div>
-
+    </div>
+    <div class="webcam-container side-by-side">
+      <div class="controls">
+        <button class="webcam-start" onclick="webcamStart()">Start Camera</button>
+        <button class="take-photo" onclick="takePhoto()">Take Photo</button>
+        <button class="reset" onclick="reset()">Reset</button>
+      </div>
+      <div class="webcam-items">
+        <video id="webcam" autoplay playsinline width="150" height="150"></video>
+        <canvas id="canvas" class="d-none"></canvas>
+        <audio id="snapSound" src="audio/snap.wav" preload = "auto"></audio>
+      </div>
     </div>
   </div>
 
   <script>
-    const threshold = 0.6
+    const threshold = 0.6;
     let descriptors = { desc1: null, desc2: null }
+
+    const webcamElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('canvas');
+    const snapSoundElement = document.getElementById('snapSound');
+    const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement);
+
+    let camStarted = false;
+    let picture; //will hold data url of webcam photo
 
     function updateResult() {
       const distance = faceapi.utils.round(
@@ -48,6 +70,11 @@
         text += ' (no match)'
         bgColor = '#ce7575'
       }
+      if (distance < threshold) {
+        text += ' (match)'
+        bgColor = '#8DDD84'
+      }
+
       $('#distance').val(text)
       $('#distance').css('background-color', bgColor)
     }
@@ -57,6 +84,15 @@
       const imgEl = $(`#face${which}`).get(0)
       imgEl.src = input.src
       descriptors[`desc${which}`] = await faceapi.computeFaceDescriptor(input)
+      // console.log(uri, input.src)
+    }
+
+    async function onWebcamCompare(){
+      const input = await faceapi.fetchImage(picture)
+      const imgEl = $(`#face2`).get(0)
+      imgEl.src = picture;
+      descriptors[`desc2`] = await faceapi.computeFaceDescriptor(input);
+      updateResult();
     }
 
     async function run() {
@@ -67,6 +103,49 @@
       updateResult()
     }
 
+    
+
+    function webcamInit(){
+      $('.take-photo, .reset').hide();
+    }
+
+    function webcamStart(){
+      webcam.start()
+      .then(result =>{
+          camStarted = true;
+          console.log("webcam started");
+          $('.take-photo').show();
+          $('.webcam-start').hide();
+      })
+      .catch(err => {
+          console.log(err);
+      });
+    }
+
+    function takePhoto(){
+      if (camStarted){
+        picture = webcam.snap();
+        // console.log(picture)
+        webcam.stop()
+        camStarted = false;
+        onWebcamCompare();
+        hideCamElements();
+        showReset();
+      }
+    }
+
+    function hideCamElements(){
+      $('.take-photo, .webcam-start, #webcam, #canvas').hide();
+    }
+
+    function showReset(){
+      $('.reset').show();
+    }
+
+    function reset(){
+      window.location.reload();
+    }
+
     $(document).ready(function() {
       //bbt.js
       renderFaceImageSelectList(
@@ -75,7 +154,7 @@
           await onSelectionChanged(1, uri)
           updateResult()
         },
-        { className: 'sheldon', imageIdx: 1 }
+        { className: 'mike', imageIdx: 1 }
       )
 
       renderFaceImageSelectList(
@@ -86,7 +165,8 @@
         },
         { className: 'mike', imageIdx: 1 }
       )
-      run()
+      run();
+      webcamInit();
     })
 
   </script>

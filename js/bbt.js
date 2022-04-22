@@ -1,4 +1,4 @@
-const classes = ["mike", "sheldon"];
+const classes = ["mike"];
 
 function getFaceImageUri(className, idx) {
   return `images/${className}/${className}${idx}.png`;

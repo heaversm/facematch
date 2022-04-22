@@ -82,3 +82,45 @@ input[type="file"]::-webkit-file-upload-button {
     color: #fff;
     border-radius: .2em;
 }
+
+.chooser-container, .webcam-container {
+  width: 400px;
+}
+
+.webcam-container {
+  align-items: flex-start;
+}
+
+.webcam-items {
+  width: 150px;
+  position: relative;
+}
+
+.controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#canvas {
+  width: 150px;
+  height: 150px;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#snapSound {
+  visibility: hidden;
+}
+
+button {
+  width: 100%;
+  margin: 10px 0;
+}
+
+#webcam {
+  border: 1px solid #dedede;
+}
